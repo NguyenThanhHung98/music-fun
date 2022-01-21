@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MUSIC FUN</title>
+    <link rel="stylesheet" type="text/css" href="ui.css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Tomorrow:300&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Antonio' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+
+
+
+    <!--Dependencies-->
+    <script src="script/Tone.js"></script>
+    <script src="script/webmidi.min.js"></script>
+    <script src="script/main.js"></script>
+    <script src="script/track.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body onload="Init()" oncontextmenu="return false">
+    <!-- <div id="master_controls">
+        <div class="button" onclick="PlayAll()">Play All</div>
+        <div class="button" onclick="StopAll()">Stop All</div>
+        <div class="button" onclick="ShowBPM(this)">BPM</div>
+        <div id="bpmMenu" style="display: none;">
+            <div class="slider">BPM [<span>120</span>]<input type="range" min="70" max="140" value="120" oninput="UpdateRange(this, 'tempo')"></div>
+        </div>
+    </div> -->
+    <div class="label">MUSIC FUN</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-md-1">
+                        <button class="btn-play" onclick="PlayAll()">PLAY</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn-stop" onclick="StopAll()">STOP</button>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="bpm" type="number" min="70" max="140" value="120" oninput="UpdateRange(this, 'tempo')" onKeyDown="return false"> <span class="label-action">BPM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <button class="btn-settings" onclick="openSettingMenu()">SETTINGS</button>
+                </div>
+                <div id="wrapper">
+                    <div id="settingMenu" style="opacity: 0;">
+                        <div id="card-track">
+                            <div class="setting-menu">Settings Menu <i class="fas fa-times close-setting" onclick="closeSettingMenu()"></i></div>
+                            <div>
+                                <div class='quantity-track'>Quantity track</div>
+                                <input id="quantity-track" class="input-track instrument-item" type="number" placeholder="Type number" min="0">
+                                <div class='quantity-track'>Instrument</div>
+                                <div class="select-dropdown instrument-item instrument-item-setting">
+                                    <select id='instrument-setting'>
+                                        <option value="Flute">Flute</option>
+                                        <option value="Piano">Piano</option>
+                                        <option value="Organ">Organ</option>
+                                        <option value="Guitar">Guitar</option>
+                                        <option value="Drums">Drums</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn-gen-setting" onclick="genTrack()">Gen Track</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="track" class="container">
+        <!-- <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(0)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(0)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track0">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 0)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 0)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 0)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 0)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(0)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(1)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(1)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track1">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 1)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 1)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 1)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 1)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(1)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(2)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(2)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track2">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 2)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 2)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 2)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 2)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(2)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(3)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(3)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track3">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 3)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 3)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 3)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 3)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(3)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(4)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(4)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track0">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 4)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 4)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 4)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 4)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(4)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(5)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(5)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track5">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 5)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 5)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 5)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 5)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(5)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(6)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(6)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track6">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 6)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 6)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 6)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 6)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(6)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div id="trackName">
+                                <input id="editTrackName" class="trackName instrument-item" type="text" placeholder="Track name">
+                            </div>
+                            <div class="select-dropdown instrument-item">
+                                <select>
+                                    <option value="Flute">Flute</option>
+                                    <option value="Piano">Piano</option>
+                                    <option value="Organ">Organ</option>
+                                    <option value="Guitar">Guitar</option>
+                                    <option value="Drums">Drums</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-4 label-action">
+                                    <div>S</div>
+                                    <input id="start" type="checkbox" class="chk" onclick="Play(7)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>M</div>
+                                    <input id="stop" type="checkbox" class="chk" onclick="Stop(7)"/>
+                                </div>
+                                <div class="col-md-4 label-action">
+                                    <div>FX</div>
+                                    <input type="checkbox" class="chk" />
+                                </div>
+                            </div>
+                            <div class="row" id="player">
+                                <i class="fa fa-volume-down"></i>
+                                <div id="volume"></div>
+                                <i class="fa fa-volume-up"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div id="tracks">
+                    <div class="track">
+                        <div class="track_steps" id="track7">
+                            <div class="step step-bold" onclick="ChangeStep(this, 0, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 1, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 2, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 3, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 4, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 5, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 6, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 7, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 8, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 9, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 10, 7)"></div>
+                            <div class="step step-bold" onclick="ChangeStep(this, 11, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 12, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 13, 7)"></div>
+                            <div class="step step-nomal" onclick="ChangeStep(this, 14, 7)"></div>
+                            <div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, 7)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div id="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn-edit" onclick="Edit(7)">Edit</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn-gen" onclick="Tracks[CurrentTrack].generate()">Gen</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <div class="col-md-7">
+                <div class="row">
+                    <div class="col-md-1">
+                        <button class="btn-play" onclick="PlayAll()">PLAY</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button class="btn-stop" onclick="StopAll()">STOP</button>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="bpm" type="number" min="70" max="140" value="120" oninput="UpdateRange(this, 'tempo')" onKeyDown="return false"> <span class="label-action">BPM</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="col-md-12">
+                    <button class="btn-settings" onclick="openSettingMenu()">SETTINGS</button>
+                </div>
+                <div id="wrapper">
+                    <div id="settingMenu" style="opacity: 0;">
+                        <div id="card-track">
+                            <div class="setting-menu">Settings Menu <i class="fas fa-times close-setting" onclick="closeSettingMenu()"></i></div>
+                            <div>
+                                <div class='quantity-track'>Quantity track</div>
+                                <input id="quantity-track" class="input-track instrument-item" type="number" placeholder="Type number" min="0">
+                                <div class='quantity-track'>Instrument</div>
+                                <div class="select-dropdown instrument-item instrument-item-setting">
+                                    <select>
+                                        <option value="Flute">Flute</option>
+                                        <option value="Piano">Piano</option>
+                                        <option value="Organ">Organ</option>
+                                        <option value="Guitar">Guitar</option>
+                                        <option value="Drums">Drums</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="btn-gen-setting" onclick="genTrack()">Gen Track</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <div id="wrapper">
+
+        <!-- <div id="tracks">
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 1</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(0)">Play</div>
+                        <div class="button" onclick="Stop(0)">Stop</div>
+                        <div class="button" onclick="Edit(0)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track0">
+                    <div class="step" onclick="ChangeStep(this, 0, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 0)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 0)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 0)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 2</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(1)">Play</div>
+                        <div class="button" onclick="Stop(1)">Stop</div>
+                        <div class="button" onclick="Edit(1)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track1">
+                    <div class="step" onclick="ChangeStep(this, 0, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 1)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 1)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 1)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 3</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(2)">Play</div>
+                        <div class="button" onclick="Stop(2)">Stop</div>
+                        <div class="button" onclick="Edit(2)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track2">
+                    <div class="step" onclick="ChangeStep(this, 0, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 2)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 2)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 2)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 4</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(3)">Play</div>
+                        <div class="button" onclick="Stop(3)">Stop</div>
+                        <div class="button" onclick="Edit(3)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track3">
+                    <div class="step" onclick="ChangeStep(this, 0, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 3)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 3)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 3)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 5</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(4)">Play</div>
+                        <div class="button" onclick="Stop(4)">Stop</div>
+                        <div class="button" onclick="Edit(4)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track4">
+                    <div class="step" onclick="ChangeStep(this, 0, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 4)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 4)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 4)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 6</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(5)">Play</div>
+                        <div class="button" onclick="Stop(5)">Stop</div>
+                        <div class="button" onclick="Edit(5)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track5">
+                    <div class="step" onclick="ChangeStep(this, 0, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 5)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 5)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 5)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 7</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(6)">Play</div>
+                        <div class="button" onclick="Stop(6)">Stop</div>
+                        <div class="button" onclick="Edit(6)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track6">
+                    <div class="step" onclick="ChangeStep(this, 0, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 6)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 6)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 6)"></div>
+                </div>
+            </div>
+            <div class="track">
+                <div class="track_header">
+                    <div class="track_name">Track 8</div>
+                    <div class="track_controls">
+                        <div class="button" onclick="Play(7)">Play</div>
+                        <div class="button" onclick="Stop(7)">Stop</div>
+                        <div class="button" onclick="Edit(7)">Edit</div>
+                    </div>
+                </div>
+                <div class="track_steps" id="track7">
+                    <div class="step" onclick="ChangeStep(this, 0, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 1, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 2, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 3, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 4, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 5, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 6, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 7, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 8, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 9, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 10, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 11, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 12, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 13, 7)"></div>
+                    <div class="step" onclick="ChangeStep(this, 14, 7)"></div>
+                    <div id="last" class="step" onclick="ChangeStep(this, 15, 7)"></div>
+                </div>
+            </div>
+        </div>      -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div id="noteMenu" class="edit_menu">
+                        <div class="edit_title label-edit">
+                            <!-- <div class="button" style="float: left;" onclick="this.parentElement.parentElement.style.bottom=''">Back</div> -->
+                            Notes
+                            <!-- <div class="button" onclick="this.parentElement.parentElement.style.bottom=''; document.getElementById('trackMenu').style.bottom=''">Close</div> -->
+                        </div>
+                        <div class="edit_options label-edit">
+                            <div id="keys">
+                                <div class="key_w">B</div>
+                                <div class="key_b">A#</div>
+                                <div class="key_w">A</div>
+                                <div class="key_b">G#</div>
+                                <div class="key_w">G</div>
+                                <div class="key_b">F#</div>
+                                <div class="key_w">F</div>
+                                <div class="key_w">E</div>
+                                <div class="key_b">D#</div>
+                                <div class="key_w">D</div>
+                                <div class="key_b">C#</div>
+                                <div class="key_w">C</div>
+                                <div class="key_b2" onclick="ClearNotes()">Clear</div>
+                                <div class="key_b2" onclick="ChangeAllOctaves(1)">+</div>
+                                <div class="key_b2" onclick="ChangeAllOctaves(-1)">-</div>
+                            </div>
+                            <div id="grid">
+                                <div id="grid_steps">
+                                    <div class="g_step" id="notes0">
+                                        <div class="key_w" onclick="AddNote('B',0,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',0,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',0,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',0,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',0,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',0,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',0,this)"></div>
+                                        <div class="key_b">1</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 0, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 0, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes1">
+                                        <div class="key_w" onclick="AddNote('B',1,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',1,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',1,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',1,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',1,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',1,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',1,this)"></div>
+                                        <div class="key_b">2</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 1, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 1, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes2">
+                                        <div class="key_w" onclick="AddNote('B',2,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',2,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',2,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',2,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',2,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',2,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',2,this)"></div>
+                                        <div class="key_b">3</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 2, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 2, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes3">
+                                        <div class="key_w" onclick="AddNote('B',3,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',3,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',3,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',3,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',3,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',3,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',3,this)"></div>
+                                        <div class="key_b">4</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 3, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 3, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes4">
+                                        <div class="key_w" onclick="AddNote('B',4,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',4,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',4,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',4,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',4,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',4,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',4,this)"></div>
+                                        <div class="key_b">5</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 4, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 4, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes5">
+                                        <div class="key_w" onclick="AddNote('B',5,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',5,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',5,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',5,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',5,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',5,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',5,this)"></div>
+                                        <div class="key_b">6</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 5, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 5, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes6">
+                                        <div class="key_w" onclick="AddNote('B',6,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',6,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',6,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',6,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',6,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',6,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',6,this)"></div>
+                                        <div class="key_b">7</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 6, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 6, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes7">
+                                        <div class="key_w" onclick="AddNote('B',7,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',7,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',7,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',7,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',7,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',7,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',7,this)"></div>
+                                        <div class="key_b">8</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 7, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 7, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes8">
+                                        <div class="key_w" onclick="AddNote('B',8,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',8,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',8,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',8,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',8,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',8,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',8,this)"></div>
+                                        <div class="key_b">9</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 8, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 8, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes9">
+                                        <div class="key_w" onclick="AddNote('B',9,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',9,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',9,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',9,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',9,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',9,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',9,this)"></div>
+                                        <div class="key_b">10</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 9, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 9, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes10">
+                                        <div class="key_w" onclick="AddNote('B',10,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',10,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',10,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',10,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',10,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',10,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',10,this)"></div>
+                                        <div class="key_b">11</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 10, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 10, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes11">
+                                        <div class="key_w" onclick="AddNote('B',11,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',11,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',11,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',11,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',11,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',11,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',11,this)"></div>
+                                        <div class="key_b">12</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 11, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 11, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes12">
+                                        <div class="key_w" onclick="AddNote('B',12,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',12,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',12,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',12,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',12,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',12,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',12,this)"></div>
+                                        <div class="key_b">13</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 12, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 12, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes13">
+                                        <div class="key_w" onclick="AddNote('B',13,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',13,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',13,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',13,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',13,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',13,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',13,this)"></div>
+                                        <div class="key_b">14</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 13, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 13, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes14">
+                                        <div class="key_w" onclick="AddNote('B',14,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',14,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',14,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',14,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',14,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',14,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',14,this)"></div>
+                                        <div class="key_b">15</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 14, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 14, this)">-</div>
+                                    </div>
+                                    <div class="g_step" id="notes15">
+                                        <div class="key_w" onclick="AddNote('B',15,this)"></div>
+                                        <div class="key_b" onclick="AddNote('A#',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('A',15,this)"></div>
+                                        <div class="key_b" onclick="AddNote('G#',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('G',15,this)"></div>
+                                        <div class="key_b" onclick="AddNote('F#',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('F',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('E',15,this)"></div>
+                                        <div class="key_b" onclick="AddNote('D#',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('D',15,this)"></div>
+                                        <div class="key_b" onclick="AddNote('C#',15,this)"></div>
+                                        <div class="key_w" onclick="AddNote('C',15,this)"></div>
+                                        <div class="key_b">16</div>
+                                        <div class="key_b" onclick="ChangeOctave(1, 15, this)">+</div>
+                                        <div class="key_b" onclick="ChangeOctave(-1, 15, this)">-</div>
+                                    </div>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div id="trackMenu" class="edit_menu">
+                        <div class="edit_title label-edit">
+                            <!-- <div class="button" style="float: left;" onclick="document.getElementById('noteMenu').style.bottom='40px'">Notes</div> -->
+                            <span>Edit</span>
+                            <div class="button" onclick="closeMenu()">Close</div>
+                        </div>
+                        <div class="edit_options label-edit">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="stepSection" class="edit_section">
+                                        <div class="section_title">Steps</div>
+                                        <div class="slider">Step Time [<span>1/4</span>]<input type="range" min="1" max="5" oninput="UpdateRange(this, 'clock')"></div>
+                                        <div class="slider">Note Length [<span>1/4</span>]<input type="range" min="1" max="6" oninput="UpdateRange(this, 'noteTime')"></div>
+                                        <div class="slider">Cycle Delay [<span>0</span>]<input type="range" min="0" max="4" oninput="UpdateRange(this, 'delay')"></div>
+                                        <div class="slider">Random Steps [<span>off</span>]<input type="range" min="1" max="2" oninput="UpdateRange(this, 'randSteps')"></div>
+                                        <div class="slider">Shift Notes [<span>off</span>]<input type="range" min="1" max="2" oninput="UpdateRange(this, 'shiftNotes')"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="randomSection" class="edit_section">
+                                        <div class="section_title">Random Sequence</div>
+                                        <div class="slider">Scale [<span>Major</span>]<input type="range" min="1" max="6" oninput="UpdateRange(this, 'scale')"></div>
+                                        <div class="slider">Root [<span>C</span>]<input type="range" min="1" max="12" oninput="UpdateRange(this, 'root')"></div>
+                                        <div class="slider">Root Octave [<span>4</span>]<input type="range" min="0" max="7" oninput="UpdateRange(this, 'octave')"></div>
+                                        <div class="slider">Max Steps [<span>8</span>]<input type="range" min="1" max="16" oninput="UpdateRange(this, 'maxNotes')"></div>
+                                        <div class="btn-generate" onclick="Tracks[CurrentTrack].generate()">Generate</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="trackSection" class="edit_section">
+                                        <div class="section_title">Track</div>
+                                        <div class="slider">Sync to Clock [<span>off</span>]<input type="range" min="0" max="1" oninput="UpdateRange(this, 'syncClock')"></div>
+                                        <div class="slider">Sync to Track[<span>off</span>]<input type="range" min="0" max="1" oninput="UpdateRange(this, 'syncTrack')"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="midiSection" class="edit_section">
+                                        <div class="section_title">MIDI</div>
+                                        <div id="deviceSlider" class="slider">Device [<span>A49 MIDI</span>]<input type="range" min="1" max="1" oninput="UpdateRange(this, 'device')"></div>
+                                        <div class="slider">Channel [<span>1</span>]<input type="range" min="1" max="16" value="1" oninput="UpdateRange(this, 'channel')"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div id="trackMenu" class="edit_menu">
+            <div class="edit_title label-edit">
+                <div class="button" style="float: left;" onclick="document.getElementById('noteMenu').style.bottom='40px'">Notes</div>
+                <span>Edit</span>
+                <div class="button" onclick="this.parentElement.parentElement.style.bottom=''">Close</div>
+            </div>
+            <div class="edit_options label-edit">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div id="midiSection" class="edit_section">
+                            <div class="section_title">MIDI</div>
+                            <div id="deviceSlider" class="slider">Device [<span>A49 MIDI</span>]<input type="range" min="1" max="1" oninput="UpdateRange(this, 'device')"></div>
+                            <div class="slider">Channel [<span>1</span>]<input type="range" min="1" max="16" value="1" oninput="UpdateRange(this, 'channel')"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="stepSection" class="edit_section">
+                            <div class="section_title">Steps</div>
+                            <div class="slider">Step Time [<span>1/4</span>]<input type="range" min="1" max="5" oninput="UpdateRange(this, 'clock')"></div>
+                            <div class="slider">Note Length [<span>1/4</span>]<input type="range" min="1" max="6" oninput="UpdateRange(this, 'noteTime')"></div>
+                            <div class="slider">Cycle Delay [<span>0</span>]<input type="range" min="0" max="4" oninput="UpdateRange(this, 'delay')"></div>
+                            <div class="slider">Random Steps [<span>off</span>]<input type="range" min="1" max="2" oninput="UpdateRange(this, 'randSteps')"></div>
+                            <div class="slider">Shift Notes [<span>off</span>]<input type="range" min="1" max="2" oninput="UpdateRange(this, 'shiftNotes')"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="randomSection" class="edit_section">
+                            <div class="section_title">Random Sequence</div>
+                            <div class="slider">Scale [<span>Major</span>]<input type="range" min="1" max="6" oninput="UpdateRange(this, 'scale')"></div>
+                            <div class="slider">Root [<span>C</span>]<input type="range" min="1" max="12" oninput="UpdateRange(this, 'root')"></div>
+                            <div class="slider">Root Octave [<span>4</span>]<input type="range" min="0" max="7" oninput="UpdateRange(this, 'octave')"></div>
+                            <div class="slider">Max Steps [<span>8</span>]<input type="range" min="1" max="16" oninput="UpdateRange(this, 'maxNotes')"></div>
+                            <div class="button" onclick="Tracks[CurrentTrack].generate()">Generate</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div id="trackSection" class="edit_section">
+                            <div class="section_title">Track</div>
+                            <div class="slider">Sync to Clock [<span>off</span>]<input type="range" min="0" max="1" oninput="UpdateRange(this, 'syncClock')"></div>
+                            <div class="slider">Sync to Track[<span>off</span>]<input type="range" min="0" max="1" oninput="UpdateRange(this, 'syncTrack')"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="noteMenu" class="edit_menu">
+            <div class="edit_title label-edit">
+                <div class="button" style="float: left;" onclick="this.parentElement.parentElement.style.bottom=''">Back</div>
+                Notes
+                <div class="button" onclick="this.parentElement.parentElement.style.bottom=''; document.getElementById('trackMenu').style.bottom=''">Close</div></div>
+            <div class="edit_options label-edit">
+                <div id="keys">
+                    <div class="key_w">B</div>
+                    <div class="key_b">A#</div>
+                    <div class="key_w">A</div>
+                    <div class="key_b">G#</div>
+                    <div class="key_w">G</div>
+                    <div class="key_b">F#</div>
+                    <div class="key_w">F</div>
+                    <div class="key_w">E</div>
+                    <div class="key_b">D#</div>
+                    <div class="key_w">D</div>
+                    <div class="key_b">C#</div>
+                    <div class="key_w">C</div>
+                    <div class="key_b2" onclick="ClearNotes()">Clear</div>
+                    <div class="key_b2" onclick="ChangeAllOctaves(1)">+</div>
+                    <div class="key_b2" onclick="ChangeAllOctaves(-1)">-</div>
+                </div>
+                <div id="grid">
+                    <div id="grid_steps">
+                        <div class="g_step" id="notes0">
+                            <div class="key_w" onclick="AddNote('B',0,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',0,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',0,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',0,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',0,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',0,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',0,this)"></div>
+                            <div class="key_b">1</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 0, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 0, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes1">
+                            <div class="key_w" onclick="AddNote('B',1,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',1,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',1,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',1,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',1,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',1,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',1,this)"></div>
+                            <div class="key_b">2</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 1, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 1, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes2">
+                            <div class="key_w" onclick="AddNote('B',2,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',2,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',2,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',2,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',2,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',2,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',2,this)"></div>
+                            <div class="key_b">3</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 2, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 2, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes3">
+                            <div class="key_w" onclick="AddNote('B',3,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',3,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',3,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',3,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',3,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',3,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',3,this)"></div>
+                            <div class="key_b">4</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 3, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 3, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes4">
+                            <div class="key_w" onclick="AddNote('B',4,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',4,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',4,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',4,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',4,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',4,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',4,this)"></div>
+                            <div class="key_b">5</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 4, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 4, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes5">
+                            <div class="key_w" onclick="AddNote('B',5,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',5,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',5,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',5,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',5,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',5,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',5,this)"></div>
+                            <div class="key_b">6</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 5, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 5, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes6">
+                            <div class="key_w" onclick="AddNote('B',6,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',6,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',6,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',6,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',6,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',6,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',6,this)"></div>
+                            <div class="key_b">7</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 6, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 6, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes7">
+                            <div class="key_w" onclick="AddNote('B',7,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',7,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',7,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',7,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',7,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',7,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',7,this)"></div>
+                            <div class="key_b">8</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 7, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 7, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes8">
+                            <div class="key_w" onclick="AddNote('B',8,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',8,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',8,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',8,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',8,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',8,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',8,this)"></div>
+                            <div class="key_b">9</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 8, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 8, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes9">
+                            <div class="key_w" onclick="AddNote('B',9,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',9,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',9,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',9,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',9,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',9,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',9,this)"></div>
+                            <div class="key_b">10</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 9, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 9, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes10">
+                            <div class="key_w" onclick="AddNote('B',10,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',10,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',10,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',10,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',10,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',10,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',10,this)"></div>
+                            <div class="key_b">11</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 10, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 10, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes11">
+                            <div class="key_w" onclick="AddNote('B',11,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',11,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',11,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',11,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',11,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',11,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',11,this)"></div>
+                            <div class="key_b">12</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 11, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 11, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes12">
+                            <div class="key_w" onclick="AddNote('B',12,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',12,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',12,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',12,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',12,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',12,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',12,this)"></div>
+                            <div class="key_b">13</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 12, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 12, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes13">
+                            <div class="key_w" onclick="AddNote('B',13,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',13,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',13,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',13,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',13,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',13,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',13,this)"></div>
+                            <div class="key_b">14</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 13, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 13, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes14">
+                            <div class="key_w" onclick="AddNote('B',14,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',14,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',14,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',14,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',14,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',14,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',14,this)"></div>
+                            <div class="key_b">15</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 14, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 14, this)">-</div>
+                        </div>
+                        <div class="g_step" id="notes15">
+                            <div class="key_w" onclick="AddNote('B',15,this)"></div>
+                            <div class="key_b" onclick="AddNote('A#',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('A',15,this)"></div>
+                            <div class="key_b" onclick="AddNote('G#',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('G',15,this)"></div>
+                            <div class="key_b" onclick="AddNote('F#',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('F',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('E',15,this)"></div>
+                            <div class="key_b" onclick="AddNote('D#',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('D',15,this)"></div>
+                            <div class="key_b" onclick="AddNote('C#',15,this)"></div>
+                            <div class="key_w" onclick="AddNote('C',15,this)"></div>
+                            <div class="key_b">16</div>
+                            <div class="key_b" onclick="ChangeOctave(1, 15, this)">+</div>
+                            <div class="key_b" onclick="ChangeOctave(-1, 15, this)">-</div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>    -->
+    </div>
+
+    <!-- <div id="wrapper">
+        <div id="settingMenu" style="opacity: 0;">
+            <div id="card-track">
+                <div class="setting-menu">Settings Menu <i class="fas fa-times close-setting"></i></div>
+                <div>
+                    <div class='quantity-track'>Quantity track</div>
+                    <input id="quantity-track" class="input-track instrument-item" type="text" placeholder="">
+                    <div class='quantity-track'>Instrument</div>
+                    <div class="select-dropdown instrument-item instrument-item-setting">
+                        <select>
+                            <option value="Flute">Flute</option>
+                            <option value="Piano">Piano</option>
+                            <option value="Organ">Organ</option>
+                            <option value="Guitar">Guitar</option>
+                            <option value="Drums">Drums</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-gen-setting" onclick="">Gen Setting</button>
+            </div>
+        </div>
+    </div> -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+        $('input.chk').on('change', function() {
+            $('input.chk').not(this).prop('checked', false);  
+        });
+    </script>
+    
+    <script>
+        $("#volume").slider({
+            min: 0,
+            max: 100,
+            value: 0,
+            range: "min",
+            slide: function(event, ui) {
+            setVolume(ui.value / 100);
+            }
+        });
+        
+        var myMedia = document.createElement('audio');
+        $('#player').append(myMedia);
+        myMedia.id = "myMedia";
+
+        playAudio('http://emilcarlsson.se/assets/Avicii%20-%20The%20Nights.mp3', 0);
+        
+        function playAudio(fileName, myVolume) {
+                myMedia.src = fileName;
+                myMedia.setAttribute('loop', 'loop');
+            setVolume(myVolume);
+            myMedia.play();
+        }
+        
+        function setVolume(myVolume) {
+        var myMedia = document.getElementById('myMedia');
+        myMedia.volume = myVolume;
+        }
+    </script>
+
+    <!-- <script>
+        for (let i=0; i<5; i++) {
+            document.getElementById('track').innerHTML += 
+            `
+            <div class="row">` + 
+            `<div class="col-md-3">` +
+                `<div id="card">` +
+                    `<div class="row">` +
+                        `<div class="col-md-6">` +
+                            `<div id="trackName">` +
+                                `<input id="editTrackName${i}" class="trackName instrument-item" type="text" placeholder="Track name">` +
+                            `</div>` +
+                            `<div class="select-dropdown instrument-item">` +
+                                `<select>` +
+                                    `<option value="Flute">Flute</option>` +
+                                    `<option value="Piano">Piano</option>` +
+                                    `<option value="Organ">Organ</option>` +
+                                    `<option value="Guitar">Guitar</option>` +
+                                    `<option value="Drums">Drums</option>` +
+                                `</select>` +
+                            `</div>` +
+                        `</div>` +
+                        `<div class="col-md-6">` +
+                            `<div class="row">` +
+                                `<div class="col-md-4 label-action">` +
+                                    `<div>S</div>` +
+                                    `<input id="start${i}" type="checkbox" class="chk" onclick="Play(${i})"/>` +
+                                `</div>` +
+                                `<div class="col-md-4 label-action">` +
+                                    `<div>M</div>` +
+                                    `<input id="stop${i}" type="checkbox" class="chk" onclick="Stop(${i})"/>` +
+                                `</div>` +
+                                `<div class="col-md-4 label-action">` +
+                                    `<div>FX</div>` +
+                                    `<input type="checkbox" class="chk" />` +
+                                `</div>` +
+                            `</div>` +
+                            `<div class="row" id="player">` +
+                                `<i class="fa fa-volume-down"></i>` +
+                                `<div id="volume"></div>` +
+                                `<i class="fa fa-volume-up"></i>` +
+                            `</div>` +
+                        `</div>` +
+                    `</div>` +
+                `</div>` +
+            `</div>` +
+            `<div class="col-md-7">` +
+                `<div id="tracks">` +
+                    `<div class="track">` +
+                        `<div class="track_steps" id="track${i}">` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 0, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 1, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 2, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 3, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 4, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 5, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 6, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 7, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 8, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 9, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 10, ${i})"></div>` +
+                            `<div class="step step-bold" onclick="ChangeStep(this, 11, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 12, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 13, ${i})"></div>` +
+                            `<div class="step step-nomal" onclick="ChangeStep(this, 14, ${i})"></div>` +
+                            `<div id="last" class="step step-nomal" onclick="ChangeStep(this, 15, ${i})"></div>` +
+                        `</div>` +
+                    `</div>` +
+                `</div>` +
+            `</div>` +
+            `<div class="col-md-2">` +
+                `<div id="card">` +
+                    `<div class="row">` +
+                        `<div class="col-md-6">` +
+                            `<button class="btn-edit" onclick="Edit(${i})">Edit</button>` +
+                        `</div>` +
+                        `<div class="col-md-6">` +
+                            `<button class="btn-gen" onclick="Tracks[CurrentTrack].generate(${i})">Gen</button>` +
+                        `</div>` +
+                    `</div>` +
+                `</div>` +
+            `</div>` +
+        `</div>
+        `
+        }
+    </script> -->
+    
+</body>

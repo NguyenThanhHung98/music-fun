@@ -1,0 +1,27 @@
+{
+  "name": "sequ",
+  "version": "1.0.0",
+  "description": "Minimal sequencer built on Tone.js",
+  "main": "script/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryan-pickert/sequ.git"
+  },
+  "author": "Ryan Pickert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryan-pickert/sequ/issues"
+  },
+  "homepage": "https://github.com/ryan-pickert/sequ#readme",
+  "devDependencies": {
+    "electron": "^7.1.7"
+  },
+  "dependencies": {
+    "tone": "^13.8.34",
+    "webmidi": "^2.5.1"
+  }
+}

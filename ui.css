@@ -1,0 +1,633 @@
+:root
+{
+    --dark-blue1: #00171F;
+    --dark-blue2: #003459;
+    --light-blue1: #007EA7;
+    --light-blue2: #00A8E8;
+}
+html, body
+{
+    height: 100%;
+    font-family: 'Antonio';
+    background: #3271bd;
+    background: -webkit-linear-gradient(-45deg, #20745f 0%, rgba(32, 116, 95, 0) 70%), -webkit-linear-gradient(-315deg, #81b0df 10%, rgba(129, 176, 223, 0) 80%), -webkit-linear-gradient(-225deg, #3271bd 10%, rgba(50, 113, 189, 0) 80%), -webkit-linear-gradient(-135deg, #375268 100%, rgba(55, 82, 104, 0) 70%);
+    background: linear-gradient(45deg, #20745f 0%, rgba(32, 116, 95, 0) 70%), linear-gradient(135deg, #81b0df 10%, rgba(129, 176, 223, 0) 80%), linear-gradient(225deg, #3271bd 10%, rgba(50, 113, 189, 0) 80%), linear-gradient(315deg, #375268 100%, rgba(55, 82, 104, 0) 70%);
+}
+/* width */
+::-webkit-scrollbar {
+    width: 6px;
+    
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--dark-blue1);
+    border-radius: 3px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--dark-blue2);
+    border-radius: 3px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--light-blue1);
+  }
+#wrapper
+{
+    /* width: 1024px; */
+    
+    max-height: 89%;
+    margin: 0px auto;
+    /* overflow-y: auto; */
+}
+#master_controls
+{
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid var(--light-blue1);
+    color: var(--light-blue2);
+}
+#master_controls .button
+{
+    margin-left: 10px;
+    border: none;
+}
+#bpmMenu
+{
+    position: absolute;
+    top: 60px;
+    left: 152px;
+    width: 182px;
+    padding: 5px;
+    background-color: var(--dark-blue1);
+    border: 1px solid var(--light-blue2);
+}
+.button
+{
+    width: fit-content;
+    height: 40px;
+    padding: 5px;
+    line-height: 40px;
+    font-size: 24px;
+    border: 1px solid var(--light-blue1);
+    float: left;
+}
+.button:hover
+{
+    background-color: var(--light-blue1);
+    color: var(--dark-blue2);
+    cursor: pointer;
+}
+#tracks
+{
+    width: 100%;
+}
+.track
+{
+    height: 88px;
+    margin-top: 6px;
+    margin-left: 3px;
+}
+.track_controls
+{
+    height: fit-content;
+}
+.track_controls .button
+{
+    font-size: 18px;
+    height: 30px;
+    line-height: 30px;
+}
+.track_header
+{
+    padding: 5px;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid var(--light-blue1);
+    float: left;
+    border-radius: 3px;
+}
+.track_name
+{
+    font-size: 20px;
+    margin-bottom: 2px;
+    padding-left: 3px;
+    background-color: var(--light-blue2);
+    color: var(--dark-blue1);
+}
+.track_steps
+{
+    float: left;
+    margin-left: 3px;
+}
+.step
+{
+    width: 39px;
+    height: 66px;
+    margin-left: 0px;
+    border: 1px solid var(--light-blue1);
+    border-right: none;
+    float: left;
+    text-indent: 3px;
+    margin-top: 25px;
+    background-color: #003459;
+    color: #fff;
+    font-family: 'Antonio';
+    text-align: center;
+    white-space: pre-line;
+}
+.step-bold {
+  opacity: 50%;
+}
+.step-nomal {
+  opacity: 30%;
+}
+#stepNum
+{
+    position: relative;
+    top: 68px;
+}
+#last
+{
+    border-right: 1px solid var(--light-blue1);
+}
+
+.edit_menu
+{
+    position: absolute;
+    width: inherit;
+    height: 550px;
+    left: 0;
+    right: 0;
+    bottom: -1200px;
+    margin: 0px auto;
+    /* border: 1px solid var(--light-blue2);
+    background-color: var(--dark-blue1); */
+    transition: bottom 0.2s;
+    box-shadow: 0px 0px 12px 2px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+}
+.edit_title
+{
+    font-size: 24px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 3px;
+}
+.edit_title .button
+{
+    font-size: 20px;
+    height: 22px;
+    line-height: 18px;
+    float: right;
+    border: none;
+}
+.edit_options
+{
+    padding: 3px;
+}
+.edit_section
+{
+    border: 1px solid #fff;
+    /* width: 183px; */
+    padding: 5px;
+    float: left;
+    /* margin-left: 21px; */
+    margin-top: 5px;
+}
+.section_title
+{
+    border-bottom: 1px solid #fff;
+    margin-bottom: 2px;
+    text-align: center;
+}
+.edit_section .button
+{
+    font-size: 18px;
+    margin-top: 2px;
+}
+#trackMenu
+{
+    /* height: 380px; */
+}
+
+#noteMenu {
+    /* background-color: var(--light-blue1); */
+}
+
+#keys
+{
+    float: left;
+    width: 50px;
+    border-right: 1px solid var(--light-blue2);
+    padding-right: 5px;
+}
+#grid_keys
+{
+    float: left;
+    width: 90%;
+}
+#grid_keys .key_b
+{
+    width: 100%;
+}
+#grid_steps
+{
+    left: 59px;
+    position: absolute;
+}
+.g_step
+{
+    height: 350px;
+    float: left;
+}
+.g_step .key_w, .g_step .key_b
+{
+    width: 43px;
+    border-radius: 0px;
+    text-align: center;
+    text-indent: 0px;
+    border: 1px solid #00455C;
+    opacity: 70%;
+}
+.key_b2
+{
+    width: 50px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 0px;
+    text-align: center;
+    text-indent: 0px;
+    border: 1px solid #00455C;
+    opacity: 70%;
+}
+.key_b2:hover
+{
+    opacity: 100%;
+}
+.key_w
+{
+    height: 32px;
+    border-radius: 3px;
+    line-height: 32px;
+    border: 1px solid var(--light-blue1);
+    background-color: #172c33;
+    text-indent: 5px;
+}
+.key_b
+{
+    text-indent: 5px;
+    line-height: 32px;
+    height: 32px;
+    width: 30px;
+    border-radius: 3px;
+    border: 1px solid var(--light-blue1);
+}
+.g_step .key_b:hover, .g_step .key_w:hover
+{
+    opacity: 100%;
+}
+
+#footer
+{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    color: rgb(0, 98, 131);
+    font-size: 14px;
+    width: 100%;
+    background-color: var(--dark-blue1);
+    padding-left: 5px;
+    padding-bottom: 5px;
+}
+a
+{
+    color: rgb(0, 112, 150);   
+}
+
+.label {
+    text-align: center;
+    font-family: 'Antonio';
+    font-weight: bold;
+    font-size: 34px;
+}
+
+#card,
+#menu,
+#weather,
+#post {
+  /* overflow: hidden; */
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.5);
+  margin-top: 30px;
+}
+
+#card {
+  text-align: center;
+  height: 66px;
+  /* padding: 30px 0; */
+}
+
+.trackName {
+    /* width: 100%; */
+    /* height: 150px; */
+    /* background: #ddd; */
+    width: 100%;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px 10px;
+}
+
+.select-dropdown,
+.select-dropdown * {
+	margin: 0;
+	padding: 0;
+	position: relative;
+	box-sizing: border-box;
+}
+.select-dropdown {
+    width: 100%;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 0px 3px 3px 10px;
+}
+.select-dropdown select {
+	font-size: 12px;
+	font-weight: normal;
+	max-width: 100%;
+	padding: 1px 1px 1px 1px;
+	border: none;
+	background-color: transparent;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+	appearance: none;
+    padding-top: 5px;
+}
+.select-dropdown select:active, .select-dropdown select:focus {
+	outline: none;
+	box-shadow: none;
+}
+.select-dropdown:after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	width: 0;
+	height: 0;
+	margin-top: -2px;
+	border-top: 5px solid #aaa;
+	border-right: 5px solid transparent;
+	border-left: 5px solid transparent;
+}
+
+.label-action {
+  font-size: 12px;
+  text-align: center;
+  color: #fff;
+  margin-left: -3px;
+  font-family: 'Antonio';
+}
+
+.label-edit {
+    text-align: center;
+    color: #fff;
+    /* margin-left: -3px; */
+    font-family: 'Antonio';
+}
+
+.instrument-item {
+    font-size: 12px;
+    text-align: center;
+    color: #fff;
+    font-family: 'Antonio';
+}
+
+#player {
+	margin: 5px auto;
+}
+
+.fa-volume-down {
+  margin-left: 2px;
+}
+
+.fa-volume-up {
+  margin-left: 73px;
+}
+
+#volume {
+	position: absolute;
+	left: 32px;
+	margin: 5px auto;
+	height: 5px;
+	width: 60px;
+	background: #555;
+	border-radius: 15px;
+}
+
+.ui-slider-range-min {
+    height: 5px;
+    width: 300px;
+    position: absolute;
+    background: #2ecc71;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+}
+
+.ui-slider-handle {
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
+    background: #FFF;
+    position: absolute;
+    margin-left: -8px;
+    margin-top: -8px;
+    cursor: pointer;
+    outline: none;
+}
+
+.btn-edit {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 18px 3px 0px 30px;
+    font-family: 'Antonio';
+}
+
+.btn-gen {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 18px 3px 0px -30px;
+    font-family: 'Antonio';
+}
+
+.btn-play {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(243, 167, 4, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px 7px;
+    font-family: 'Antonio';
+}
+
+.btn-stop {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(243, 167, 4, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px 7px;
+    font-family: 'Antonio';
+}
+
+.bpm {
+    width: 60px;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px 7px;
+    font-family: 'Antonio';
+}
+
+.btn-settings {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(243, 167, 4, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px -15px;
+    font-family: 'Antonio';
+}
+
+.btn-generate {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 10px 0px 8px 0px;
+    font-family: 'Antonio';
+    cursor: pointer;
+}
+
+#card-track {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 2px rgba(255, 255, 255, 0.5);
+    margin-top: 30px;
+    height: 175px;
+    width: 160px;
+}
+
+.quantity-track {
+    font-size: 12px;
+    color: #fff;
+    font-family: 'Antonio';
+    text-align: left;
+    margin: 0px 3px 3px 10px
+}
+
+.input-track {
+    width: 138px;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 0px 3px 3px 10px
+}
+
+.setting-menu {
+    font-size: 14px;
+    color: #fff;
+    font-family: 'Antonio';
+    margin-bottom: 5px;
+    margin-left: 40px;
+}
+
+.instrument-item-setting {
+    width: 138px;
+}
+
+.close-setting {
+    margin-left: 30px;
+}
+
+.btn-gen-setting {
+    width: fit-content;
+    height: 30px;
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: rgba(243, 167, 4, 0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 0 10px;
+    transition: all .3s;
+    margin: 3px 3px 0px 40px;
+    font-family: 'Antonio';
+}
